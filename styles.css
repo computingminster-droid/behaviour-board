@@ -1,0 +1,350 @@
+/* ============================================================
+   Behaviour Board – styles.css
+   Version 0.5 (gesture model + feedback)
+   ============================================================ */
+
+/* =======================
+   Global base
+   ======================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 12px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Arial, sans-serif;
+  background-color: #ffffff;
+  color: #222;
+}
+
+/* =======================
+   Disable selection (board-safe)
+   ======================= */
+
+#controls,
+#legend,
+.seat,
+.seat *,
+.seat-row,
+.row-header,
+.summary-close {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+/* =======================
+   CONTROLS BAR (GROUPED)
+   ======================= */
+
+#controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 14px;
+  font-weight: bold;
+}
+
+.control-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.control-group + .control-group {
+  padding-left: 14px;
+  border-left: 2px solid rgba(0, 0, 0, 0.15);
+}
+
+body.dark .control-group + .control-group {
+  border-left-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Buttons */
+
+.control-group > div {
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.control-group > div.disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+.data-group > div {
+  font-weight: normal;
+  opacity: 0.9;
+}
+
+.control-group > div:not(.disabled):hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+body.dark .control-group > div:not(.disabled):hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* =======================
+   Toggle switches
+   ======================= */
+
+.toggle-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  outline: none;
+}
+
+.toggle-control:focus-visible {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+}
+
+.toggle-label {
+  font-weight: bold;
+}
+
+.toggle-switch {
+  width: 36px;
+  height: 18px;
+  background-color: #ccc;
+  border-radius: 9px;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-switch.on {
+  background-color: #2ecc71;
+}
+
+.toggle-thumb {
+  width: 14px;
+  height: 14px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s ease;
+}
+
+.toggle-switch.on .toggle-thumb {
+  transform: translateX(18px);
+}
+
+/* =======================
+   Legend
+   ======================= */
+
+#legend {
+  margin-bottom: 14px;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+/* =======================
+   ROW-BASED GRID
+   ======================= */
+
+#grid-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #ccc;
+}
+
+.row-header {
+  width: 110px;
+  text-align: right;
+  padding-right: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+/* =======================
+   SEATS (FIXED GEOMETRY)
+   ======================= */
+
+.seat {
+  position: relative;
+  width: 92px;
+  padding: 8px 6px;
+  border: 2px solid #333;
+  border-radius: 6px;
+  background-color: #f4f4f4;
+  text-align: center;
+
+  touch-action: none;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Name area */
+
+.seat-name {
+  min-height: 1.4em;
+  line-height: 1.4em;
+  font-weight: bold;
+  font-size: 0.95em;
+}
+
+/* Seat number badge */
+
+.seat-number {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-size: 0.7em;
+  opacity: 0.6;
+}
+
+/* =======================
+   Positive behaviour (★)
+   ======================= */
+
+.positives {
+  min-height: 1.2em;
+  line-height: 1.2em;
+}
+
+.positives span {
+  color: #2ecc71;
+  margin-right: 1px;
+}
+
+/* =======================
+   Negative behaviour (C)
+   ======================= */
+
+.empty-behaviour {
+  width: 12px;
+  height: 12px;
+}
+
+.behaviour-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 2px;
+  background-color: #bbb;
+}
+
+.behaviour-c1 { background-color: #f1c40f; }
+.behaviour-c2 { background-color: #e67e22; }
+.behaviour-c3 { background-color: #e74c3c; }
+.behaviour-c4 {
+  background-color: #8e0000;
+  border: 2px solid #000;
+}
+
+/* =======================
+   PHASE 1 VISUAL FEEDBACK
+   ======================= */
+
+.seat-pulse-positive {
+  box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.35);
+}
+
+.seat-pulse-negative {
+  box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.35);
+}
+
+.seat-pulse-calm {
+  box-shadow: 0 0 0 4px rgba(149, 165, 166, 0.4);
+}
+
+.seat-pulse-reset {
+  box-shadow: 0 0 0 4px rgba(127, 140, 141, 0.4);
+}
+
+.seat-pulse-blocked {
+  box-shadow: 0 0 0 4px rgba(189, 195, 199, 0.45);
+}
+
+/* =======================
+   SUMMARY VIEW
+   ======================= */
+
+.summary-close {
+  margin-top: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* =======================
+   DARK MODE
+   ======================= */
+
+body.dark {
+  background-color: #1c1c1c;
+  color: #f0f0f0;
+}
+
+body.dark .seat {
+  background-color: #2a2a2a;
+  border-color: #888;
+}
+
+body.dark .seat-row {
+  border-bottom-color: #444;
+}
+
+/* =======================
+   HIGH CONTRAST MODE
+   ======================= */
+
+body.high-contrast {
+  background-color: #000;
+  color: #fff;
+}
+
+body.high-contrast .seat {
+  background-color: #000;
+  border: 3px solid #fff;
+}
+
+body.high-contrast .seat-name,
+body.high-contrast .row-header {
+  font-weight: bold;
+}
+
+body.high-contrast .seat-number {
+  opacity: 1;
+}
+
+body.high-contrast .positives span {
+  color: #00ff00;
+}
+
+body.high-contrast .behaviour-dot {
+  background-color: #fff;
+  border: 2px solid #fff;
+}
+
+body.high-contrast .behaviour-c1 { background-color: #ffff00; }
+body.high-contrast .behaviour-c2 { background-color: #ffa500; }
+body.high-contrast .behaviour-c3,
+body.high-contrast .behaviour-c4 {
+  background-color: #ff0000;
+  border: 3px solid #fff;
+}
